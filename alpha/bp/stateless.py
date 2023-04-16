@@ -4,11 +4,17 @@ from sanic.response import text, HTTPResponse, json
 import alpha.model as model
 import sanic
 from alpha.utils import add_cors_headers, test
+import os
 from ._build import buildBluePrint
+import alpha.config.vars as vars
 
 bp: Blueprint = buildBluePrint(__file__)
+bp.static("/sgf", "dist")
 
-
+@bp.get('/sgf/list')
+async def get_sgf_list(request: sanic.Request):
+    data = [{"file": i, "url": f'{vars.scheme_url}/{bp.url_prefix}/sgf/{i}'} for i in os.listdir("dist")]
+    return json(data, ensure_ascii=False)
 
 @bp.get("/relay")      # query
 async def relay_get(request: sanic.Request):
