@@ -40,11 +40,34 @@ async def get_article(request: sanic.Request, id):
 
 @bp.get("/live")
 async def get_live(request: sanic.Request):
+    headers = {}
+    headers['user-agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
     records = await model.LiveModel.all().values()
+    async with httpx.AsyncClient() as client:
+        for id, i in enumerate(records):
+            print(i)
+            url = f"https://api.bilibili.com/x/space/acc/info?mid={i['uid']}"
+            resp = await client.get(url, headers=headers)
+            try:
+                json_data = resp.json()
+            except:
+                _content = resp.content.decode()
+                _bug = '{"code":-509,"message":"请求过于频繁，请稍后再试","ttl":1}'
+                if _content.startswith(_bug):
+                    import json as js
+                    _x = _content[len(_bug):]
+                    json_data = js.loads(_x)
+
+            records[id]['name'] = json_data['data']['name']
+
     return json(records)
 
 @test
 @bp.get('/test')
 async def test_get(request: sanic.Request):
-    return text('test')
+    import time
+    time.sleep(1)
+    return json({
+        "pid":os.getpid(),
+    })
 

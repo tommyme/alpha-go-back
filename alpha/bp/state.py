@@ -82,12 +82,12 @@ async def get_messages(request: Request, user: UserTuple):
 @test
 @bp.websocket('/test/makews')
 async def test_conn_websocket(request: Request, ws: Websocket):
-    user = UserTuple(id='4bd45530-d112-44fa-88d8-eda0397f5d7f', name= 'aaa')
+    user = UserTuple(id='4bd45530-d112-44fa-88d8-eda0397f5d7f', name= 'aaa', admin=False)
     async for msg in ws:
         resp_msg = "[自动回复]: 您好, 客服暂时不在 您的留言我们已经收到 请您耐心等待"
         # 消息进入数据库
-        await model.ChatMsgModel(userId=user.id, msg=msg, toId=_common.ADMIN_UUID).save()
-        await model.ChatMsgModel(userId=_common.ADMIN_UUID, msg=resp_msg, toId=user.id).save()
+        # await model.ChatMsgModel(userId=user.id, msg=msg, toId=_common.ADMIN_UUID).save()
+        # await model.ChatMsgModel(userId=_common.ADMIN_UUID, msg=resp_msg, toId=user.id).save()
         # 返回消息
         await ws.send(resp_msg)
 

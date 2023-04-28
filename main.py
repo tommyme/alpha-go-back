@@ -16,4 +16,4 @@ register_tortoise(
 )
 
 if __name__ == '__main__':
-    app.run(host=vars.host, port=vars.port, dev=True)
+    app.run(host=vars.host, port=vars.port, dev=True, workers=3)
