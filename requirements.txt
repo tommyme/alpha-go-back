@@ -1,0 +1,7 @@
+sanic==22.12.2
+tortoise-orm==0.19.2
+httpx==0.23.3
+requests
+click
+sanic-auth==0.3.0
+sanic_ext==22.9.1
