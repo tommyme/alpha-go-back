@@ -5,3 +5,4 @@ requests
 click
 sanic-auth==0.3.0
 sanic_ext==22.9.1
+aerich==0.7.1
